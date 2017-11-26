@@ -1,8 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "semantic-ui-css/semantic.min.css";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+import { manageIngredients, result } from "./store/reducers";
+
+const reducers = combineReducers({
+  manageIngredients,
+  result
+});
+
+const store = createStore(reducers);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
 registerServiceWorker();
