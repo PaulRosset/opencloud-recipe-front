@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import reactDOM from "react-dom";
 import styled from "styled-components";
 import { Icon, Popup, Form } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { DELETEFIELD, FILLINGREDIENT } from "./../store/types";
+import { DELETEFIELD, FILLINGREDIENT, VALIDITY } from "./../store/types";
 
 const Ingredient = styled.div`
   display: inline-flex;
@@ -20,13 +19,25 @@ class IngredientInput extends Component {
           name={this.props.name}
           placeholder={this.props.placeholder}
           key={this.props.id}
-          onChange={e =>
+          onChange={e => {
+            if (e.target.value === "") {
+              this.props.dispatch({
+                type: VALIDITY,
+                payload: true
+              });
+            } else {
+              this.props.dispatch({
+                type: VALIDITY,
+                payload: false
+              });
+            }
             this.props.dispatch({
               type: FILLINGREDIENT,
               id: this.props.id,
               name: this.props.placeholder,
               payload: e.target.value
-            })}
+            });
+          }}
         />
         <Popup
           trigger={

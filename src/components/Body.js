@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Segment, Grid, Divider, Advertisement } from "semantic-ui-react";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 import Form from "./Form";
 import { Results } from "./Result";
@@ -19,6 +20,7 @@ const Container = styled.div`
 
 class Body extends Component {
   render() {
+    console.log("EHLLO", this.props.result.payload);
     return (
       <BodyContainer>
         <Advertisement
@@ -37,9 +39,8 @@ class Body extends Component {
         <Divider section />
         <Container>
           {this.props.result.length > 0 ? <h1>Results:</h1> : null}
-          {this.props.result.map((recipe, index) => (
+          {_.map(this.props.result.payload, (recipe, index) => (
             <Results
-              key={recipe.id}
               header={recipe.first_name}
               description={recipe.last_name}
               img={recipe.avatar}

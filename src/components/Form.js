@@ -1,23 +1,12 @@
 import React, { Component } from "react";
 import agent from "superagent";
-import styled from "styled-components";
-import { Icon, Form } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import IngredientInput from "./Ingredient";
 import SubHeader from "./SubHeader";
 import Portal from "./Advert";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
 import { GETRESULT } from "../store/types";
-
-const Advert = styled.p`
-  font-size: 15px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: auto;
-  width: 100%;
-  text-align: center;
-`;
 
 class FormUpload extends Component {
   constructor(props) {
@@ -43,7 +32,7 @@ class FormUpload extends Component {
             loading: false
           });
         } else {
-          this.props.dispatch({ type: GETRESULT, payload: res.body });
+          this.props.dispatch({ type: GETRESULT, payload: res.body.data });
           this.setState({
             open: true,
             header: "Here it is !",
@@ -74,6 +63,7 @@ class FormUpload extends Component {
               loading={this.state.loading}
               content="Submit"
               size="small"
+              disabled={this.props.validity}
             />
           </Form.Group>
         </Form>
@@ -93,7 +83,8 @@ FormUpload.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  ingredients: state.manageIngredients
+  ingredients: state.manageIngredients,
+  validity: state.validity
 });
 
 export default connect(mapStateToProps)(FormUpload);

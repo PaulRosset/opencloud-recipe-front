@@ -1,11 +1,17 @@
-import { ADDFIELD, DELETEFIELD, FILLINGREDIENT, GETRESULT } from "./types";
+import {
+  ADDFIELD,
+  DELETEFIELD,
+  FILLINGREDIENT,
+  GETRESULT,
+  VALIDITY
+} from "./types";
 
 let keyID = 0;
 
 const initialState = [
   {
     id: keyID,
-    name: "Ingrediant",
+    name: "Ingredient",
     payload: ""
   }
 ];
@@ -38,11 +44,20 @@ export const manageIngredients = (state = initialState, action) => {
   }
 };
 
-export const result = (state = [], action) => {
+export const result = (state = {}, action) => {
   switch (action.type) {
     case GETRESULT:
       console.log(state, action);
-      return [...state, action.payload.data];
+      return { ...state, payload: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const validity = (state = true, action) => {
+  switch (action.type) {
+    case VALIDITY:
+      return action.payload;
     default:
       return state;
   }
