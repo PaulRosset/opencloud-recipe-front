@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Segment, Grid, Divider, Advertisement } from "semantic-ui-react";
 import { connect } from "react-redux";
 import _ from "lodash";
+import Stepping from "./Step";
 
 import Form from "./Form";
 import { Results } from "./Result";
@@ -20,7 +21,6 @@ const Container = styled.div`
 
 class Body extends Component {
   render() {
-    console.log("EHLLO", this.props.result.payload);
     return (
       <BodyContainer>
         <Advertisement
@@ -28,11 +28,12 @@ class Body extends Component {
           test="Oh my Recipe 🧐"
           style={{ margin: "20px auto", fontSize: "20px" }}
         />
+        <Stepping />
         <Divider section />
         <Grid textAlign="center">
           <Grid.Column width={10} textAlign="center">
             <Segment size="tiny" padded={true} piled>
-              <Form res={body => this.setState({ result: body })} />
+              <Form />
             </Segment>
           </Grid.Column>
         </Grid>
@@ -41,6 +42,7 @@ class Body extends Component {
           {this.props.result.length > 0 ? <h1>Results:</h1> : null}
           {_.map(this.props.result.payload, (recipe, index) => (
             <Results
+              key={index}
               header={recipe.first_name}
               description={recipe.last_name}
               img={recipe.avatar}

@@ -7,12 +7,18 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
-import { manageIngredients, result, validity } from "./store/reducers";
+import {
+  manageIngredients,
+  result,
+  validity,
+  stepping
+} from "./store/reducers";
 
 const reducers = combineReducers({
   manageIngredients,
   result,
-  validity
+  validity,
+  stepping
 });
 
 const store = createStore(reducers);

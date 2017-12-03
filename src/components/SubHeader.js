@@ -16,7 +16,7 @@ class SubHeader extends Component {
     return (
       <div>
         <Title>
-          Tell us about the ingredients that you have ?{" "}
+          Step 2{" "}
           <Popup
             trigger={
               <Icon
@@ -33,6 +33,7 @@ class SubHeader extends Component {
             content="Add another ingredient 🍎"
           />
         </Title>
+        {this.props.children}
       </div>
     );
   }

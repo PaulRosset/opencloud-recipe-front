@@ -1,72 +1,46 @@
 import React, { Component } from "react";
-import agent from "superagent";
-import { Form } from "semantic-ui-react";
-import IngredientInput from "./Ingredient";
-import SubHeader from "./SubHeader";
 import Portal from "./Advert";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
-import { GETRESULT } from "../store/types";
+import FormIngredients from "./FormIngredients";
+import FormStep1 from "./FormStep1";
+import FormStep3 from "./FormStep3";
 
 class FormUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      open: false
+      open: false,
+      ingredients: {}
     };
   }
 
-  SubmitRecipe(e) {
-    agent
-      .get("https://reqres.in/api/users?page=2")
-      .use(() => this.setState({ loading: true }))
-      .set("Content-type", "application/json")
-      .end((err, res) => {
-        if (err || !res.body) {
-          this.setState({
-            open: true,
-            header: "Unfortunately, we encountered an error",
-            message: "You can try again later, sorry 🤕",
-            color: "red",
-            loading: false
-          });
-        } else {
-          this.props.dispatch({ type: GETRESULT, payload: res.body.data });
-          this.setState({
-            open: true,
-            header: "Here it is !",
-            message:
-              "You can find below all the recipe you can cook with your ingredients.",
-            color: "green",
-            loading: false
-          });
-        }
-      });
+  formGiven() {
+    if (
+      this.props.steppings[0] &&
+      this.props.steppings[0].isSteped1 &&
+      !this.props.steppings[1]
+    ) {
+      return <FormIngredients />;
+    }
+    if (this.props.steppings[1] && this.props.steppings[1].isSteped2) {
+      return <FormStep3 />;
+    }
+    return <FormStep1 />;
   }
 
   render() {
+    console.log(this.props.steppings);
     return (
       <div className="form-container">
-        <SubHeader />
-        <Form onSubmit={e => this.SubmitRecipe(e)}>
-          <Form.Group grouped>
-            {this.props.ingredients.map((value, index) => (
-              <IngredientInput
-                name={`ingrediant${value.id}`}
-                placeholder={value.name}
-                key={value.id}
-                id={value.id}
-              />
-            ))}
-            <Form.Button
-              loading={this.state.loading}
-              content="Submit"
-              size="small"
-              disabled={this.props.validity}
-            />
-          </Form.Group>
-        </Form>
+        {this.formGiven()}
+        {/*  <FormStep3 /> */}
+        {/* <FormIngredients
+          ingredients={this.props.ingredients}
+          SubmitRecipe={e => this.SubmitRecipe(e)}
+          loading={this.state.loading}
+          validity={this.props.validity}
+        /> */}
         <Portal
           open={this.state.open}
           header={this.state.header}
@@ -84,7 +58,8 @@ FormUpload.propTypes = {
 
 const mapStateToProps = state => ({
   ingredients: state.manageIngredients,
-  validity: state.validity
+  validity: state.validity,
+  steppings: state.stepping
 });
 
 export default connect(mapStateToProps)(FormUpload);

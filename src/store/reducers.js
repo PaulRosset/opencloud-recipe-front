@@ -3,7 +3,10 @@ import {
   DELETEFIELD,
   FILLINGREDIENT,
   GETRESULT,
-  VALIDITY
+  VALIDITY,
+  STEP1,
+  STEP2,
+  STEP3
 } from "./types";
 
 let keyID = 0;
@@ -47,7 +50,6 @@ export const manageIngredients = (state = initialState, action) => {
 export const result = (state = {}, action) => {
   switch (action.type) {
     case GETRESULT:
-      console.log(state, action);
       return { ...state, payload: action.payload };
     default:
       return state;
@@ -58,6 +60,26 @@ export const validity = (state = true, action) => {
   switch (action.type) {
     case VALIDITY:
       return action.payload;
+    default:
+      return state;
+  }
+};
+
+const initialStateStepping = [{ isSteped1: false }];
+
+export const stepping = (state = initialStateStepping, action) => {
+  switch (action.type) {
+    case STEP1:
+      return state.map(value => {
+        return { isSteped1: true, ...action.payload };
+      });
+    case STEP2:
+      const ingredientsTitle = action.payload.map(value => ({
+        ingredient: value.payload
+      }));
+      return [...state, { isSteped2: true, ingredientsTitle }];
+    case STEP3:
+      return [...state, { isSteped3: true, recipe: action.payload }];
     default:
       return state;
   }
