@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Header, Form } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { STEP3 } from "../store/types";
+import { STEP3, GETRESULTRECIPE } from "../store/types";
 
 const optionsRecipe = [
   { key: "1", value: "ag1", text: "Alergies 1" },
@@ -24,13 +24,24 @@ class FormStep3 extends React.Component {
 
   onSubmit() {
     const { recipe } = this.state;
-    this.props.dispatch({
-      type: STEP3,
-      payload: recipe
-    });
+    agent
+      .get("https://reqres.in/api/users?page=2")
+      .use(() => this.setState({ loading: true }))
+      .set("Content-type", "application/json")
+      .end((err, res) => {
+        if (!err) {
+          this.props.dispatch({
+            type: GETRESULTRECIPE,
+            payload: res.body.data
+          });
+          this.props.dispatch({ type: STEP3, payload: recipe });
+          this.setState({ loading: false });
+        }
+      });
   }
 
   render() {
+    console.log(this.props.results);
     return (
       <Container>
         <Header as="h4" textAlign="left">
@@ -44,7 +55,7 @@ class FormStep3 extends React.Component {
             options={optionsRecipe}
           />
           <Form.Button
-            loading={false}
+            loading={this.state.loading}
             content="Submit"
             size="small"
             disabled={this.state.disabled}
@@ -56,7 +67,8 @@ class FormStep3 extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  steppings: state.stepping
+  steppings: state.stepping,
+  results: state.result
 });
 
 export default connect(mapStateToProps)(FormStep3);

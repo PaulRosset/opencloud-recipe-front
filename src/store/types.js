@@ -2,7 +2,10 @@ export const ADDFIELD = "addField";
 export const DELETEFIELD = "deleteField";
 export const FILLINGREDIENT = "fillIngredient";
 
-export const GETRESULT = "getResult";
+//export const GETRESULT = "getResult";
+export const GETRESULTAC = "getResultAlergieCuisine";
+export const GETRESULTRECIPE = "getResultRecipe";
+
 export const VALIDITY = "validity";
 
 export const STEP1 = "step-1";

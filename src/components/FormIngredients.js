@@ -4,42 +4,28 @@ import IngredientInput from "./Ingredient";
 import SubHeader from "./SubHeader";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { GETRESULT, STEP2 } from "../store/types";
+import { GETRESULTRECIPE, STEP2 } from "../store/types";
 
 class FormIngredients extends React.Component {
   state = {
     loading: false,
     disabled: true,
+    open: false,
     ingredients: {}
   };
 
   SubmitRecipe(e) {
     agent
       .get("https://reqres.in/api/users?page=2")
-      .use(() => {
-        this.setState({ loading: true });
-      })
+      .use(() => this.setState({ loading: true }))
       .set("Content-type", "application/json")
       .end((err, res) => {
-        if (err || !res.body) {
-          this.setState({
-            open: true,
-            header: "Unfortunately, we encountered an error",
-            message: "You can try again later, sorry 🤕",
-            color: "red",
-            loading: false
+        if (!err) {
+          this.props.dispatch({
+            type: GETRESULTRECIPE,
+            payload: res.body.data
           });
-        } else {
-          this.props.dispatch({ type: GETRESULT, payload: res.body.data });
           this.props.dispatch({ type: STEP2, payload: this.props.ingredients });
-          this.setState({
-            open: true,
-            header: "Here it is !",
-            message:
-              "You can find below all the recipe you can cook with your ingredients.",
-            color: "green",
-            loading: false
-          });
         }
       });
   }
@@ -73,7 +59,8 @@ class FormIngredients extends React.Component {
 const mapStateToProps = state => ({
   ingredients: state.manageIngredients,
   validity: state.validity,
-  steppings: state.stepping
+  steppings: state.stepping,
+  results: state.result
 });
 
 export default connect(mapStateToProps)(FormIngredients);

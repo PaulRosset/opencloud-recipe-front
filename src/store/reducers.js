@@ -2,11 +2,12 @@ import {
   ADDFIELD,
   DELETEFIELD,
   FILLINGREDIENT,
-  GETRESULT,
   VALIDITY,
   STEP1,
   STEP2,
-  STEP3
+  STEP3,
+  GETRESULTAC,
+  GETRESULTRECIPE
 } from "./types";
 
 let keyID = 0;
@@ -49,8 +50,10 @@ export const manageIngredients = (state = initialState, action) => {
 
 export const result = (state = {}, action) => {
   switch (action.type) {
-    case GETRESULT:
-      return { ...state, payload: action.payload };
+    case GETRESULTAC:
+      return { ...state, resultAC: action.payload };
+    case GETRESULTRECIPE:
+      return { ...state, resultRecipe: action.payload };
     default:
       return state;
   }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Header, Icon, Form } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { STEP1 } from "../store/types";
+import { STEP1, GETRESULTAC } from "../store/types";
 
 const optionsAlergies = [
   { key: "1", value: "ag1", text: "Alergies 1" },
@@ -78,19 +78,23 @@ class FormStep1 extends React.Component {
   onSubmit(e) {
     const { alergie, cuisine } = this.state;
     const step1 = { alergie, cuisine };
-    this.props.dispatch({
-      type: STEP1,
-      payload: { alergie, cuisine, isSteped1: true }
-    });
-    //console.log(this.props.steppings);
-    /* agent
-      .post("donnemoil'url.com")
+    agent
+      .get("https://reqres.in/api/users?page=2")
       .set("Content-type", "application/json")
       .use(() => this.setState({ loading: true }))
-      .send(step1)
       .end((err, res) => {
-
-      }) */
+        if (!err) {
+          console.log(res.body);
+          this.props.dispatch({
+            type: STEP1,
+            payload: { alergie, cuisine, isSteped1: true }
+          });
+          this.props.dispatch({
+            type: GETRESULTAC,
+            payload: res.body.data
+          });
+        }
+      });
   }
 
   render() {
