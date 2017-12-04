@@ -4,16 +4,7 @@ import { Header, Icon, Form } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
 import { STEP1, GETRESULTAC } from "../store/types";
-
-const optionsAlergies = [
-  { key: "1", value: "ag1", text: "Alergies 1" },
-  { key: "2", value: "ag2", text: "Alergies 2" }
-];
-
-const optionsCuisine = [
-  { key: "1", value: "africa", text: "Africa" },
-  { key: "2", value: "french", text: "French" }
-];
+import { optionsAlergies, optionsCuisines } from "./../options";
 
 const InputContainer = styled.div`
   margin: 20px 0;
@@ -77,23 +68,26 @@ class FormStep1 extends React.Component {
 
   onSubmit(e) {
     const { alergie, cuisine } = this.state;
-    const step1 = { alergie, cuisine };
     agent
-      .get("https://reqres.in/api/users?page=2")
-      .set("Content-type", "application/json")
+      .post(
+        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients"
+      )
+      .send(`allergens=${alergie}`)
+      .send(`cuisines=${cuisine}`)
+      .send(`userId=1`)
       .use(() => this.setState({ loading: true }))
       .end((err, res) => {
         if (!err) {
-          console.log(res.body);
           this.props.dispatch({
             type: STEP1,
             payload: { alergie, cuisine, isSteped1: true }
           });
           this.props.dispatch({
             type: GETRESULTAC,
-            payload: res.body.data
+            payload: res.body.ingredients
           });
         }
+        window.scrollTo(0, 550);
       });
   }
 
@@ -115,7 +109,7 @@ class FormStep1 extends React.Component {
             id="cuisine"
             icon="food"
             desc="Cuisine"
-            options={optionsCuisine}
+            options={optionsCuisines}
             title="Which kind of cuisine you want"
           />
           <Form.Button

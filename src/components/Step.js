@@ -2,6 +2,7 @@ import React from "react";
 import { Icon, Step } from "semantic-ui-react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import _upperFirst from "lodash/upperFirst";
 
 const Fragment = React.Fragment;
 const Container = styled.div`text-align: center;`;
@@ -16,10 +17,10 @@ const ResumeAC = props => (
       <Fragment>
         <Smaller>
           <b>Alergie: </b>
-          {props.alergie}
+          {_upperFirst(props.alergie)}
           <br />
           <b>Cuisine: </b>
-          {props.cuisine}
+          {_upperFirst(props.cuisine)}
         </Smaller>
       </Fragment>
     ) : null}
@@ -30,7 +31,7 @@ const ResumeIngredients = props => (
   <Smaller>
     {props.ingredients.map((value, index) => (
       <Fragment key={index}>
-        <b>Ingredient:</b> {value.ingredient}
+        <b>Ingredient:</b> {_upperFirst(value.ingredient)}
         <br />
       </Fragment>
     ))}

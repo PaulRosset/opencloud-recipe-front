@@ -15,17 +15,25 @@ class FormIngredients extends React.Component {
   };
 
   SubmitRecipe(e) {
+    const { alergie, cuisine } = this.props.steppings[0];
+    const ingredients = this.props.ingredients.map(value => value.payload);
     agent
-      .get("https://reqres.in/api/users?page=2")
+      .post(
+        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes"
+      )
+      .send(`allergens=${alergie}`)
+      .send(`cuisines=${cuisine}`)
+      .send(`ingredients=${JSON.stringify(ingredients)}`)
+      .send(`userId=1`)
       .use(() => this.setState({ loading: true }))
-      .set("Content-type", "application/json")
       .end((err, res) => {
         if (!err) {
           this.props.dispatch({
             type: GETRESULTRECIPE,
-            payload: res.body.data
+            payload: res.body.items
           });
           this.props.dispatch({ type: STEP2, payload: this.props.ingredients });
+          window.scrollTo(0, 550);
         }
       });
   }

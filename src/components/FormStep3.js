@@ -41,7 +41,7 @@ class FormStep3 extends React.Component {
   }
 
   render() {
-    console.log(this.props.results);
+    console.log("RESULT RECIPE", this.props.results);
     return (
       <Container>
         <Header as="h4" textAlign="left">

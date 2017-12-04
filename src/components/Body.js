@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import Stepping from "./Step";
 
 import Form from "./Form";
-import { ResultsAC, ResultFinal } from "./Result";
+import { ResultsAC, ResultsRecipes, ResultFinal } from "./Result";
 
 const BodyContainer = styled.div`
     width: 100%;
@@ -35,7 +35,7 @@ class Body extends Component {
       this.props.steppings.length === 2
     ) {
       return (
-        <ResultsAC
+        <ResultsRecipes
           result={this.props.result.resultRecipe}
           name={<Spaned color="#db2828">Recipes results</Spaned>}
         />
