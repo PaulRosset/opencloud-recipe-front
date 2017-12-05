@@ -3,36 +3,47 @@ import styled from "styled-components";
 import { Header, Form } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { STEP3, GETRESULTRECIPE } from "../store/types";
-
-const optionsRecipe = [
-  { key: "1", value: "ag1", text: "Alergies 1" },
-  { key: "2", value: "ag2", text: "Alergies 2" }
-];
+import { STEP3, GETRECIPE } from "../store/types";
 
 const Container = styled.div``;
 
 class FormStep3 extends React.Component {
-  state = { disabled: true };
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: true,
+      optionsRecipe: this.props.results.resultRecipe.map((value, index) => ({
+        key: index,
+        value: value.id,
+        text: value.name
+      }))
+    };
+  }
 
   onChangeRecipe(e, { value }) {
-    this.setState({
-      recipe: value,
-      disabled: false
-    });
+    this.setState(
+      {
+        recipe: value,
+        disabled: false
+      },
+      () => console.log("RECIPED", this.state.recipe)
+    );
   }
 
   onSubmit() {
     const { recipe } = this.state;
     agent
-      .get("https://reqres.in/api/users?page=2")
+      .post(
+        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/saveUserRecipes"
+      )
+      .send(`recipeIds=${recipe}`)
+      .send("userId=temp101")
       .use(() => this.setState({ loading: true }))
-      .set("Content-type", "application/json")
       .end((err, res) => {
         if (!err) {
           this.props.dispatch({
-            type: GETRESULTRECIPE,
-            payload: res.body.data
+            type: GETRECIPE,
+            payload: res.body
           });
           this.props.dispatch({ type: STEP3, payload: recipe });
           this.setState({ loading: false });
@@ -41,7 +52,7 @@ class FormStep3 extends React.Component {
   }
 
   render() {
-    console.log("RESULT RECIPE", this.props.results);
+    console.log(GETRECIPE, this.props.results.resultRecipe);
     return (
       <Container>
         <Header as="h4" textAlign="left">
@@ -52,7 +63,7 @@ class FormStep3 extends React.Component {
             onChange={(e, { value }) => this.onChangeRecipe(e, { value })}
             style={{ width: "60%" }}
             placeholder="Choose the recipe you want!"
-            options={optionsRecipe}
+            options={this.state.optionsRecipe}
           />
           <Form.Button
             loading={this.state.loading}

@@ -14,6 +14,7 @@ import styled from "styled-components";
 import { optionsIngredientsDevColor } from "./../options";
 import _upperFirst from "lodash/upperFirst";
 import _camelCase from "lodash/camelCase";
+import _find from "lodash/find";
 
 import fruits from "./../img/fruits.png";
 import vegetables from "./../img/vegetables.png";
@@ -70,7 +71,7 @@ export const ResultsAC = props => {
               size="small"
             />
           }
-          content="Enter ingredients 🌽"
+          content="Enter ingredients! 🌽"
         />
       </h1>
       {resultingAC.map((value, index) => (
@@ -171,50 +172,56 @@ export const ResultFinal = props => (
       </span>
     </Header>
     <Segment style={{ marginBottom: "30px" }}>
-      <Header as="h4" textAlign="left">
+      <Header as="h3" textAlign="left">
         Here is your recipe!
       </Header>
       <List>
-        <Header as="h5">
+        <Header as="h4" style={{ marginBottom: "5px" }}>
           <Icon name="treatment" color="blue" />Alergie and Cuisine
         </Header>
         <List.Item>
           <List.Content>
             <List.Header>
-              Alergie: <Spaned color="#2185d0">{props.alergie}</Spaned>
+              Alergie:{" "}
+              <Spaned color="#2185d0">{_upperFirst(props.alergie)}</Spaned>
             </List.Header>
           </List.Content>
         </List.Item>
         <List.Item>
           <List.Content>
             <List.Header>
-              Cuisine: <Spaned color="#2185d0">{props.cuisine}</Spaned>
+              Cuisine:{" "}
+              <Spaned color="#2185d0">{_upperFirst(props.cuisine)}</Spaned>
             </List.Header>
           </List.Content>
         </List.Item>
       </List>
       <List>
-        <Header as="h5">
+        <Header as="h4" style={{ marginBottom: "5px" }}>
           <Icon name="lemon" color="yellow" /> Ingredients
         </Header>
         {props.ingredients.map((value, index) => (
           <List.Item key={index}>
             <List.Content>
               <List.Header>
-                Ingredient: <Spaned color="#fbbd08">{value.ingredient}</Spaned>
+                Ingredient:{" "}
+                <Spaned color="#fbbd08">{_upperFirst(value.ingredient)}</Spaned>
               </List.Header>
             </List.Content>
           </List.Item>
         ))}
       </List>
       <List>
-        <Header as="h5">
+        <Header as="h4" style={{ marginBottom: "5px" }}>
           <Icon name="food" color="red" /> Recipe
         </Header>
         <List.Item>
           <List.Content>
             <List.Header>
-              Recipe: <Spaned color="#db2828">{props.recipe}</Spaned>
+              Recipe:{" "}
+              <Spaned color="#db2828">
+                {_find(props.results, { id: props.recipe }).name}
+              </Spaned>
             </List.Header>
           </List.Content>
         </List.Item>

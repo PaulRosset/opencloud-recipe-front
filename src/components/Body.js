@@ -47,6 +47,7 @@ class Body extends Component {
           cuisine={cuisine}
           ingredients={this.props.steppings[1].ingredientsTitle}
           recipe={this.props.steppings[2].recipe}
+          results={this.props.result.resultRecipe}
         />
       );
     }

@@ -3,6 +3,7 @@ import { Icon, Step } from "semantic-ui-react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import _upperFirst from "lodash/upperFirst";
+import _find from "lodash/find";
 
 const Fragment = React.Fragment;
 const Container = styled.div`text-align: center;`;
@@ -40,7 +41,7 @@ const ResumeIngredients = props => (
 
 const ResumeRecipe = props => (
   <Smaller>
-    <b>Recipe:</b> {props.recipe}
+    <b>Recipe:</b> {_find(props.recipe, { id: props.step }).name}
   </Smaller>
 );
 
@@ -97,7 +98,10 @@ const Stepping = props => (
           <Step.Content>
             Get the list of recipe!<br />
             {props.steppings[2] ? (
-              <ResumeRecipe recipe={props.steppings[2].recipe} />
+              <ResumeRecipe
+                step={props.steppings[2].recipe}
+                recipe={props.results.resultRecipe}
+              />
             ) : null}
           </Step.Content>
         </Step.Content>
@@ -107,7 +111,8 @@ const Stepping = props => (
 );
 
 const mapStateToProps = state => ({
-  steppings: state.stepping
+  steppings: state.stepping,
+  results: state.result
 });
 
 export default connect(mapStateToProps)(Stepping);

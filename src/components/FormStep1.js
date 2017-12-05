@@ -74,7 +74,7 @@ class FormStep1 extends React.Component {
       )
       .send(`allergens=${alergie}`)
       .send(`cuisines=${cuisine}`)
-      .send(`userId=1`)
+      .send(`userId=temp101`)
       .use(() => this.setState({ loading: true }))
       .end((err, res) => {
         if (!err) {

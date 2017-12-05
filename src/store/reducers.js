@@ -7,7 +7,8 @@ import {
   STEP2,
   STEP3,
   GETRESULTAC,
-  GETRESULTRECIPE
+  GETRESULTRECIPE,
+  GETRECIPE
 } from "./types";
 
 let keyID = 0;
@@ -54,6 +55,8 @@ export const result = (state = {}, action) => {
       return { ...state, resultAC: action.payload };
     case GETRESULTRECIPE:
       return { ...state, resultRecipe: action.payload };
+    case GETRECIPE:
+      return { ...state, resultRecipeFinal: action.payload };
     default:
       return state;
   }
