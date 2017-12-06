@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Icon } from "semantic-ui-react";
+import { Icon, Image } from "semantic-ui-react";
+import Kent from "./../img/kent.png";
 
 const HeaderBar = styled.div`
   width: 100%;
@@ -13,6 +14,7 @@ const AlignVertical = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  width: ${props => props.size || "auto"};
 `;
 
 const Title = styled.span`
@@ -21,16 +23,20 @@ const Title = styled.span`
   font-size: 16px;
 `;
 
-export default class Header extends Component {
-  render() {
-    return (
-      <HeaderBar>
-        <AlignVertical>
-          <Title>
-            <Icon name="cloud" />OpenCloudPlatform
-          </Title>
-        </AlignVertical>
-      </HeaderBar>
-    );
-  }
-}
+export const Header = () => (
+  <HeaderBar>
+    <AlignVertical>
+      <Title>
+        <Icon name="cloud" />Open Cloud Platform
+      </Title>
+    </AlignVertical>
+    <AlignVertical size="100%" space="1em">
+      <Image
+        src={Kent}
+        size="tiny"
+        floated="right"
+        style={{ marginRight: "1em" }}
+      />
+    </AlignVertical>
+  </HeaderBar>
+);

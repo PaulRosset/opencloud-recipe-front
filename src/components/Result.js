@@ -2,14 +2,13 @@ import React from "react";
 import {
   Item,
   Segment,
-  Dimmer,
-  Loader,
   Header,
   List,
   Icon,
   Divider,
   Popup
 } from "semantic-ui-react";
+import propTypes from "prop-types";
 import styled from "styled-components";
 import { optionsIngredientsDevColor } from "./../options";
 import _upperFirst from "lodash/upperFirst";
@@ -44,13 +43,7 @@ const ItemStyled = styled(Item)`display: flex;`;
 const Spaned = styled.span`color: ${props => props.color};`;
 const Bolded = styled.b`color: ${props => props.color};`;
 
-export const Loading = props => (
-  <Segment>
-    <Dimmer active={props.active} inverted>
-      <Loader inverted>Loading</Loader>
-    </Dimmer>
-  </Segment>
-);
+const secToMin = sec => sec / 60;
 
 export const ResultsAC = props => {
   const resultingAC = props.result.map(value => JSON.parse(value));
@@ -122,7 +115,7 @@ export const ResultsRecipes = props => (
             size="small"
           />
         }
-        content="Choose your recipe! 🍽"
+        content={props.desc}
       />
     </h1>
     {props.result.map((value, index) => (
@@ -145,7 +138,7 @@ export const ResultsRecipes = props => (
             </Item.Description>
             <Item.Extra>
               <Icon name="wait" />
-              {value.prepTime} min
+              {secToMin(value.prepTime)} min
             </Item.Extra>
             <Item.Extra>
               <a href={value.instructions} style={{ color: "#f2711c" }}>
@@ -173,16 +166,16 @@ export const ResultFinal = props => (
     </Header>
     <Segment style={{ marginBottom: "30px" }}>
       <Header as="h3" textAlign="left">
-        Here is your recipe!
+        Here is the resume of your recipe that you saved!
       </Header>
       <List>
         <Header as="h4" style={{ marginBottom: "5px" }}>
-          <Icon name="treatment" color="blue" />Alergie and Cuisine
+          <Icon name="treatment" color="blue" />Allergy and Cuisine
         </Header>
         <List.Item>
           <List.Content>
             <List.Header>
-              Alergie:{" "}
+              Allergy:{" "}
               <Spaned color="#2185d0">{_upperFirst(props.alergie)}</Spaned>
             </List.Header>
           </List.Content>
@@ -198,7 +191,7 @@ export const ResultFinal = props => (
       </List>
       <List>
         <Header as="h4" style={{ marginBottom: "5px" }}>
-          <Icon name="lemon" color="yellow" /> Ingredients
+          <Icon name="lemon" color="yellow" /> Ingredients you choose!
         </Header>
         {props.ingredients.map((value, index) => (
           <List.Item key={index}>
@@ -206,6 +199,23 @@ export const ResultFinal = props => (
               <List.Header>
                 Ingredient:{" "}
                 <Spaned color="#fbbd08">{_upperFirst(value.ingredient)}</Spaned>
+              </List.Header>
+            </List.Content>
+          </List.Item>
+        ))}
+      </List>
+      <List>
+        <Header as="h4" style={{ margin: "3px 0" }}>
+          <Icon name="lemon" color="yellow" /> Additional ingredients you need!
+        </Header>
+        {JSON.parse(
+          _find(props.results, { id: props.recipe }).ingredients
+        ).map((value, index) => (
+          <List.Item key={index}>
+            <List.Content>
+              <List.Header>
+                Ingredient:{" "}
+                <Spaned color="#fbbd08">{_upperFirst(value)}</Spaned>
               </List.Header>
             </List.Content>
           </List.Item>
@@ -229,3 +239,20 @@ export const ResultFinal = props => (
     </Segment>
   </Fragment>
 );
+
+ResultsAC.propTypes = {
+  result: propTypes.array,
+  name: propTypes.node
+};
+
+ResultsRecipes.propTypes = {
+  name: propTypes.node,
+  desc: propTypes.string
+};
+
+ResultFinal.propTypes = {
+  alergie: propTypes.array,
+  cuisine: propTypes.string,
+  ingredients: propTypes.arrayOf(propTypes.object),
+  results: propTypes.array
+};

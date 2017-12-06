@@ -33,7 +33,9 @@ class FormUpload extends Component {
 }
 
 FormUpload.propTypes = {
-  ingredients: propTypes.arrayOf(propTypes.object)
+  ingredients: propTypes.arrayOf(propTypes.object),
+  validity: propTypes.bool,
+  steppings: propTypes.arrayOf(propTypes.object)
 };
 
 const mapStateToProps = state => ({

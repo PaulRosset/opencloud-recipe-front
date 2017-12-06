@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import propTypes from "prop-types";
 import styled from "styled-components";
 import { Icon, Popup, Form } from "semantic-ui-react";
 import { connect } from "react-redux";
@@ -63,5 +64,13 @@ class IngredientInput extends Component {
 const mapStateToProps = state => ({
   ingredients: state.manageIngredients
 });
+
+IngredientInput.propTypes = {
+  ingredients: propTypes.arrayOf(propTypes.object),
+  placeholder: propTypes.string,
+  id: propTypes.number,
+  name: propTypes.string,
+  dispatch: propTypes.func
+};
 
 export default connect(mapStateToProps)(IngredientInput);

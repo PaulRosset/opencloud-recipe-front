@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import propTypes from "prop-types";
 import styled from "styled-components";
 import { Icon, Popup } from "semantic-ui-react";
 import { connect } from "react-redux";
@@ -10,8 +11,6 @@ const Title = styled.h5`
 `;
 
 class SubHeader extends Component {
-  addIngredient() {}
-
   render() {
     return (
       <div>
@@ -42,5 +41,11 @@ class SubHeader extends Component {
 const mapStateToProps = state => ({
   ingredients: state.manageIngredients
 });
+
+SubHeader.propTypes = {
+  ingredients: propTypes.arrayOf(propTypes.object),
+  dispatch: propTypes.func,
+  children: propTypes.node
+};
 
 export default connect(mapStateToProps)(SubHeader);

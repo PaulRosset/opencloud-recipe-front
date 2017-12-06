@@ -1,4 +1,5 @@
 import React from "react";
+import propTypes from "prop-types";
 import { Icon, Step } from "semantic-ui-react";
 import styled from "styled-components";
 import { connect } from "react-redux";
@@ -17,7 +18,7 @@ const ResumeAC = props => (
     {props.alergie && props.cuisine ? (
       <Fragment>
         <Smaller>
-          <b>Alergie: </b>
+          <b>Allergy: </b>
           {_upperFirst(props.alergie)}
           <br />
           <b>Cuisine: </b>
@@ -55,7 +56,7 @@ const Stepping = props => (
       >
         <Icon name="treatment" color="blue" />
         <Step.Content>
-          <Step.Title>Alergie & Cuisine</Step.Title>
+          <Step.Title>Allergy & Cuisine</Step.Title>
           <Step.Content>
             Tell us about you!<br />
             <ResumeAC
@@ -97,7 +98,7 @@ const Stepping = props => (
           <Step.Title>Recipe</Step.Title>
           <Step.Content>
             Get the list of recipe!<br />
-            {props.steppings[2] ? (
+            {props.steppings[2] && props.results.resultRecipe ? (
               <ResumeRecipe
                 step={props.steppings[2].recipe}
                 recipe={props.results.resultRecipe}
@@ -114,5 +115,23 @@ const mapStateToProps = state => ({
   steppings: state.stepping,
   results: state.result
 });
+
+ResumeAC.propTypes = {
+  alergie: propTypes.array,
+  cuisine: propTypes.string
+};
+
+ResumeIngredients.propTypes = {
+  ingredients: propTypes.arrayOf(propTypes.object)
+};
+
+ResumeRecipe.propTypes = {
+  recipe: propTypes.array,
+  step: propTypes.string
+};
+
+Stepping.propTypes = {
+  steppings: propTypes.arrayOf(propTypes.object)
+};
 
 export default connect(mapStateToProps)(Stepping);

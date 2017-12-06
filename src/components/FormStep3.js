@@ -1,11 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import { Header, Form } from "semantic-ui-react";
+import propTypes from "prop-types";
+import { Header, Form, Icon, Popup, Confirm } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { STEP3, GETRECIPE } from "../store/types";
+import { STEP3, GETRECIPE, LASTRECIPES } from "../store/types";
 
-const Container = styled.div``;
+const Fragment = React.Fragment;
 
 class FormStep3 extends React.Component {
   constructor(props) {
@@ -18,16 +18,26 @@ class FormStep3 extends React.Component {
         text: value.name
       }))
     };
+    agent
+      .post(
+        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllUserRecipes"
+      )
+      .send("userId=temp101")
+      .end((err, res) => {
+        if (!err) {
+          this.props.dispatch({
+            type: LASTRECIPES,
+            payload: res.body.items
+          });
+        }
+      });
   }
 
   onChangeRecipe(e, { value }) {
-    this.setState(
-      {
-        recipe: value,
-        disabled: false
-      },
-      () => console.log("RECIPED", this.state.recipe)
-    );
+    this.setState({
+      recipe: value,
+      disabled: false
+    });
   }
 
   onSubmit() {
@@ -36,7 +46,7 @@ class FormStep3 extends React.Component {
       .post(
         "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/saveUserRecipes"
       )
-      .send(`recipeIds=${recipe}`)
+      .send(`recipeIds=["${recipe}"]`)
       .send("userId=temp101")
       .use(() => this.setState({ loading: true }))
       .end((err, res) => {
@@ -51,12 +61,55 @@ class FormStep3 extends React.Component {
       });
   }
 
+  show() {
+    this.setState({
+      open: true
+    });
+  }
+
+  handleConfirm() {
+    this.setState(
+      {
+        open: false
+      },
+      () => (window.location.pathname = "/")
+    );
+  }
+
+  handleCancel() {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
-    console.log(GETRECIPE, this.props.results.resultRecipe);
     return (
-      <Container>
+      <div>
         <Header as="h4" textAlign="left">
           Finally, choose your recipe!
+          {this.props.steppings[2] ? (
+            <Fragment>
+              <Popup
+                trigger={
+                  <Icon
+                    name="refresh"
+                    rounded
+                    circular
+                    link
+                    size="tiny"
+                    style={{ float: "right" }}
+                    onClick={this.show.bind(this)}
+                  />
+                }
+                content="Refresh and load a new recipe!"
+              />
+              <Confirm
+                open={this.state.open}
+                onCancel={this.handleCancel.bind(this)}
+                onConfirm={this.handleConfirm.bind(this)}
+              />
+            </Fragment>
+          ) : null}
         </Header>
         <Form onSubmit={this.onSubmit.bind(this)}>
           <Form.Select
@@ -72,7 +125,7 @@ class FormStep3 extends React.Component {
             disabled={this.state.disabled}
           />
         </Form>
-      </Container>
+      </div>
     );
   }
 }
@@ -81,5 +134,13 @@ const mapStateToProps = state => ({
   steppings: state.stepping,
   results: state.result
 });
+
+propTypes.FormStep3 = {
+  resultRecipe: propTypes.arrayOf(propTypes.object),
+  disabled: propTypes.func,
+  steppings: propTypes.arrayOf(propTypes.object),
+  results: propTypes.object,
+  dispatch: propTypes.func
+};
 
 export default connect(mapStateToProps)(FormStep3);

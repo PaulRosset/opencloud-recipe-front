@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import propTypes, { object } from "prop-types";
 import styled from "styled-components";
 import { Segment, Grid, Divider, Advertisement } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Stepping from "./Step";
-
 import Form from "./Form";
 import { ResultsAC, ResultsRecipes, ResultFinal } from "./Result";
 
@@ -38,6 +38,7 @@ class Body extends Component {
         <ResultsRecipes
           result={this.props.result.resultRecipe}
           name={<Spaned color="#db2828">Recipes results</Spaned>}
+          desc="Choose your recipe! 🍽"
         />
       );
     } else if (this.props.steppings.length === 3) {
@@ -54,7 +55,6 @@ class Body extends Component {
   }
 
   render() {
-    console.log("STEP", this.props.steppings);
     return (
       <BodyContainer>
         <Advertisement
@@ -73,6 +73,15 @@ class Body extends Component {
         </Grid>
         <Divider section />
         <Container>{this.resultToRender()}</Container>
+        <Container>
+          {this.props.result.resultLastRecipe && this.props.steppings[2] ? (
+            <ResultsRecipes
+              result={this.props.result.resultLastRecipe}
+              name={<Spaned color="#db2828">Last Recipes saved</Spaned>}
+              desc="Go up͎ ↑"
+            />
+          ) : null}
+        </Container>
       </BodyContainer>
     );
   }
@@ -82,5 +91,10 @@ const mapStateToProps = state => ({
   result: state.result,
   steppings: state.stepping
 });
+
+propTypes.Body = {
+  result: propTypes.object,
+  steppings: propTypes.arrayOf(object)
+};
 
 export default connect(mapStateToProps)(Body);

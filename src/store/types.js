@@ -5,6 +5,7 @@ export const FILLINGREDIENT = "fillIngredient";
 export const GETRESULTAC = "getResultAlergieCuisine";
 export const GETRESULTRECIPE = "getResultRecipe";
 export const GETRECIPE = "getRecipeFinal";
+export const LASTRECIPES = "lastRecipesSaved";
 
 export const VALIDITY = "validity";
 

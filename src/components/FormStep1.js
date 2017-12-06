@@ -1,4 +1,5 @@
 import React from "react";
+import propTypes from "prop-types";
 import styled from "styled-components";
 import { Header, Icon, Form } from "semantic-ui-react";
 import agent from "superagent";
@@ -23,6 +24,7 @@ export const InputSelect = props => (
       {props.title}
     </Header>
     <Form.Select
+      multiple={props.multiple}
       className={props.id}
       id={props.name}
       onChange={(e, { value }) => props.onChange(e, { value })}
@@ -97,12 +99,13 @@ class FormStep1 extends React.Component {
         <Header textAlign="left">Step 1</Header>
         <Form onSubmit={e => this.onSubmit(e)}>
           <InputSelect
+            multiple={true}
             onChange={(e, { value }) => this.onChangeAlergie(e, { value })}
             id="alergie"
             icon="treatment"
-            desc="Allergie"
+            desc="Allergy"
             options={optionsAlergies}
-            title="Tell us about your allergie"
+            title="Tell us about your allergy"
           />
           <InputSelect
             onChange={(e, { value }) => this.onChangeCuisine(e, { value })}
@@ -127,5 +130,17 @@ class FormStep1 extends React.Component {
 const mapStateToProps = state => ({
   steppings: state.stepping
 });
+
+InputSelect.propTypes = {
+  icon: propTypes.string,
+  title: propTypes.string,
+  multiple: propTypes.bool,
+  id: propTypes.string,
+  name: propTypes.string,
+  onChange: propTypes.func,
+  desc: propTypes.string,
+  options: propTypes.arrayOf(propTypes.object),
+  dispatch: propTypes.func
+};
 
 export default connect(mapStateToProps)(FormStep1);
