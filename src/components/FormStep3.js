@@ -3,7 +3,7 @@ import propTypes from "prop-types";
 import { Header, Form, Icon, Popup, Confirm } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
-import { STEP3, GETRECIPE, LASTRECIPES } from "../store/types";
+import { STEP3, GETRECIPE } from "../store/types";
 
 const Fragment = React.Fragment;
 
@@ -18,19 +18,6 @@ class FormStep3 extends React.Component {
         text: value.name
       }))
     };
-    agent
-      .post(
-        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllUserRecipes"
-      )
-      .send("userId=temp101")
-      .end((err, res) => {
-        if (!err) {
-          this.props.dispatch({
-            type: LASTRECIPES,
-            payload: res.body.items
-          });
-        }
-      });
   }
 
   onChangeRecipe(e, { value }) {

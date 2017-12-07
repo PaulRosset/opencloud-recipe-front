@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import agent from "superagent";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
 import FormIngredients from "./FormIngredients";
 import FormStep1 from "./FormStep1";
 import FormStep3 from "./FormStep3";
+import { LASTRECIPES } from "./../store/types";
 
 class FormUpload extends Component {
   constructor(props) {
@@ -11,6 +13,19 @@ class FormUpload extends Component {
     this.state = {
       ingredients: {}
     };
+    agent
+      .post(
+        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllUserRecipes"
+      )
+      .send("userId=temp101")
+      .end((err, res) => {
+        if (!err) {
+          this.props.dispatch({
+            type: LASTRECIPES,
+            payload: res.body.items
+          });
+        }
+      });
   }
 
   formGiven() {

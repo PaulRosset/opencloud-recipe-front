@@ -10,35 +10,46 @@ import { GETRESULTRECIPE, STEP2 } from "../store/types";
 class FormIngredients extends React.Component {
   state = {
     loading: false,
-    disabled: true,
-    ingredients: {}
+    disabled: false,
+    ingredients: {},
+    msgAlert: ""
   };
 
   SubmitRecipe() {
     const { alergie, cuisine } = this.props.steppings[0];
     const ingredients = this.props.ingredients.map(value => value.payload);
-    agent
-      .post(
-        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes"
-      )
-      .send(`allergens=${alergie}`)
-      .send(`cuisines=${cuisine}`)
-      .send(`ingredients=${JSON.stringify(ingredients)}`)
-      .send(`userId=temp101`)
-      .use(() => this.setState({ loading: true }))
-      .end((err, res) => {
-        if (!err) {
-          this.props.dispatch({
-            type: GETRESULTRECIPE,
-            payload: res.body.items
-          });
-          this.props.dispatch({
-            type: STEP2,
-            payload: this.props.ingredients
-          });
-          window.scrollTo(0, 550);
-        }
+    if (ingredients[0].length === 0) {
+      this.setState({
+        msgAlert: "Please types ingredients!"
       });
+      return;
+    } else {
+      this.setState({
+        msgAlert: ""
+      });
+      agent
+        .post(
+          "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes"
+        )
+        .send(`allergens=${alergie}`)
+        .send(`cuisines=${cuisine}`)
+        .send(`ingredients=${JSON.stringify(ingredients)}`)
+        .send(`userId=temp101`)
+        .use(() => this.setState({ loading: true, disabled: true }))
+        .end((err, res) => {
+          if (!err) {
+            this.props.dispatch({
+              type: GETRESULTRECIPE,
+              payload: res.body.items
+            });
+            this.props.dispatch({
+              type: STEP2,
+              payload: this.props.ingredients
+            });
+            window.scrollTo(0, 550);
+          }
+        });
+    }
   }
 
   render() {
@@ -58,8 +69,9 @@ class FormIngredients extends React.Component {
               loading={this.state.loading}
               content="Submit"
               size="small"
-              disabled={this.props.validity}
+              disabled={this.state.disabled}
             />
+            <p style={{ color: "#db2828" }}>{this.state.msgAlert}</p>
           </Form.Group>
         </Form>
       </SubHeader>

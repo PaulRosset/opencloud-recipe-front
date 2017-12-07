@@ -74,7 +74,7 @@ class Body extends Component {
         <Divider section />
         <Container>{this.resultToRender()}</Container>
         <Container>
-          {this.props.result.resultLastRecipe && this.props.steppings[2] ? (
+          {this.props.result.resultLastRecipe ? (
             <ResultsRecipes
               result={this.props.result.resultLastRecipe}
               name={<Spaned color="#db2828">Last Recipes saved</Spaned>}
