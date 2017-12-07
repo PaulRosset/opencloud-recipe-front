@@ -108,6 +108,7 @@ class FormStep1 extends React.Component {
             title="Tell us about your allergy"
           />
           <InputSelect
+            multiple={true}
             onChange={(e, { value }) => this.onChangeCuisine(e, { value })}
             id="cuisine"
             icon="food"

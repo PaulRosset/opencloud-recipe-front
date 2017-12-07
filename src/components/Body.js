@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import propTypes, { object } from "prop-types";
+import propTypes from "prop-types";
 import styled from "styled-components";
-import { Segment, Grid, Divider, Advertisement } from "semantic-ui-react";
+import { Segment, Grid, Divider, Header, Image } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Stepping from "./Step";
 import Form from "./Form";
 import { ResultsAC, ResultsRecipes, ResultFinal } from "./Result";
+import RecipeBook from "./../img/recipe.png";
+import Recipe from "./../img/fruit-salad.png";
 
 const BodyContainer = styled.div`
     width: 100%;
@@ -18,6 +20,22 @@ const Spaned = styled.span`color: ${props => props.color};`;
 const Container = styled.div`
   width: 90%;
   margin: auto;
+`;
+
+const ImageRotating = styled(Image)`transform: rotate(${props => props.deg});`;
+
+const HeaderH = styled.div`
+  height: 3em;
+  position: relative;
+  width: 60%;
+  margin: 30px auto;
+`;
+
+const VerticalAlign = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
 `;
 
 class Body extends Component {
@@ -57,11 +75,24 @@ class Body extends Component {
   render() {
     return (
       <BodyContainer>
-        <Advertisement
-          unit="leaderboard"
-          test="Oh my Recipe 🧐"
-          style={{ margin: "20px auto", fontSize: "20px" }}
-        />
+        <HeaderH>
+          <VerticalAlign>
+            <Header as="h2" textAlign="center" style={{ marginTop: 15 }}>
+              <ImageRotating
+                deg="-18deg"
+                src={RecipeBook}
+                floated="left"
+                size="huge"
+              />Oh my Recipe 🧐
+              <ImageRotating
+                deg="18deg"
+                src={Recipe}
+                floated="right"
+                size="huge"
+              />{" "}
+            </Header>
+          </VerticalAlign>
+        </HeaderH>
         <Stepping />
         <Divider section />
         <Grid textAlign="center">
@@ -94,7 +125,7 @@ const mapStateToProps = state => ({
 
 propTypes.Body = {
   result: propTypes.object,
-  steppings: propTypes.arrayOf(object)
+  steppings: propTypes.arrayOf(propTypes.object)
 };
 
 export default connect(mapStateToProps)(Body);
