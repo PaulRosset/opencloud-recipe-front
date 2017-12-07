@@ -98,7 +98,9 @@ const Stepping = props => (
           <Step.Title>Recipe</Step.Title>
           <Step.Content>
             Get the list of recipe!<br />
-            {props.steppings[2] && props.results.resultRecipe ? (
+            {props.steppings[2] &&
+            props.results &&
+            props.results.resultRecipe ? (
               <ResumeRecipe
                 step={props.steppings[2].recipe}
                 recipe={props.results.resultRecipe}

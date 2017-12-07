@@ -6,7 +6,6 @@ import SubHeader from "./SubHeader";
 import agent from "superagent";
 import { connect } from "react-redux";
 import { GETRESULTRECIPE, STEP2 } from "../store/types";
-import _throttle from "lodash/throttle";
 
 class FormIngredients extends React.Component {
   state = {
@@ -15,7 +14,7 @@ class FormIngredients extends React.Component {
     ingredients: {}
   };
 
-  SubmitRecipe = () => {
+  SubmitRecipe() {
     const { alergie, cuisine } = this.props.steppings[0];
     const ingredients = this.props.ingredients.map(value => value.payload);
     agent
@@ -33,16 +32,19 @@ class FormIngredients extends React.Component {
             type: GETRESULTRECIPE,
             payload: res.body.items
           });
-          this.props.dispatch({ type: STEP2, payload: this.props.ingredients });
+          this.props.dispatch({
+            type: STEP2,
+            payload: this.props.ingredients
+          });
           window.scrollTo(0, 550);
         }
       });
-  };
+  }
 
   render() {
     return (
       <SubHeader>
-        <Form onSubmit={_throttle(() => this.SubmitRecipe(), 1500)}>
+        <Form onSubmit={e => this.SubmitRecipe(e)}>
           <Form.Group grouped>
             {this.props.ingredients.map((value, index) => (
               <IngredientInput
