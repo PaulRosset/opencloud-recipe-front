@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Icon, Image } from "semantic-ui-react";
-import Kent from "./../img/kent.png";
+import { Icon } from "semantic-ui-react";
 
 const HeaderBar = styled.div`
   width: 100%;
@@ -27,16 +26,8 @@ export const Header = () => (
   <HeaderBar>
     <AlignVertical>
       <Title>
-        <Icon name="cloud" />Open Cloud Platform
+        <Icon name="cloud" />Oh my Recipe
       </Title>
-    </AlignVertical>
-    <AlignVertical size="100%" space="1em">
-      <Image
-        src={Kent}
-        size="tiny"
-        floated="right"
-        style={{ marginRight: "1em" }}
-      />
     </AlignVertical>
   </HeaderBar>
 );
