@@ -31,7 +31,7 @@ class FormIngredients extends React.Component {
       const cuisines = cuisine;
       agent
         .post(
-          "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes?userId=temp101"
+          "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes?userId=temp101"
         )
         .set("accept", "json")
         .send(

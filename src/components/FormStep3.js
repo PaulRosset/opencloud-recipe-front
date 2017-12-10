@@ -31,7 +31,7 @@ class FormStep3 extends React.Component {
     const { recipe } = this.state;
     agent
       .post(
-        "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/saveUserRecipes?userId=temp101"
+        "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/saveUserRecipes?userId=temp101"
       )
       .set("accept", "json")
       .send({

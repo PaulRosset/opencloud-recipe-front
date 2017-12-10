@@ -74,7 +74,7 @@ class FormStep1 extends React.Component {
     const cuisines = cuisine;
     agent
       .post(
-        "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients?userId=temp101"
+        "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients?userId=temp101"
       )
       .set("accept", "json")
       .send(JSON.stringify(Object.assign({ allergens }, { cuisines })))
@@ -96,11 +96,11 @@ class FormStep1 extends React.Component {
 
   async componentDidMount() {
     this.optionsCuisines = await GetCuisineAllergen(
-      "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getCuisines",
+      "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getCuisines",
       () => this.setState({ loadingForm: true })
     );
     this.optionsAlergies = await GetCuisineAllergen(
-      "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllergens",
+      "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllergens",
       () => this.setState({ loadingForm: true })
     );
     this.setState({
