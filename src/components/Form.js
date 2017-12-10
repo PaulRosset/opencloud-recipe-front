@@ -15,9 +15,8 @@ class FormUpload extends Component {
     };
     agent
       .post(
-        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllUserRecipes"
+        "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllUserRecipes?userId=temp101"
       )
-      .send("userId=temp101")
       .end((err, res) => {
         if (!err) {
           this.props.dispatch({

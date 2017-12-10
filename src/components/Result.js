@@ -39,14 +39,20 @@ const optionsIngredientsDev = {
 
 const Fragment = React.Fragment;
 
-const ItemStyled = styled(Item)`display: flex;`;
-const Spaned = styled.span`color: ${props => props.color};`;
-const Bolded = styled.b`color: ${props => props.color};`;
+const ItemStyled = styled(Item)`
+  display: flex;
+`;
+const Spaned = styled.span`
+  color: ${props => props.color};
+`;
+const Bolded = styled.b`
+  color: ${props => props.color};
+`;
 
 const secToMin = sec => sec / 60;
 
 export const ResultsAC = props => {
-  const resultingAC = props.result.map(value => JSON.parse(value));
+  const resultingAC = props.result.map(value => value);
   return (
     <Segment style={{ marginBottom: "30px" }}>
       <h1>
@@ -208,18 +214,18 @@ export const ResultFinal = props => (
         <Header as="h4" style={{ margin: "3px 0" }}>
           <Icon name="lemon" color="yellow" /> Additional ingredients you need!
         </Header>
-        {JSON.parse(
-          _find(props.results, { id: props.recipe }).ingredients
-        ).map((value, index) => (
-          <List.Item key={index}>
-            <List.Content>
-              <List.Header>
-                Ingredient:{" "}
-                <Spaned color="#fbbd08">{_upperFirst(value)}</Spaned>
-              </List.Header>
-            </List.Content>
-          </List.Item>
-        ))}
+        {JSON.parse(_find(props.results, { id: props.recipe }).ingredients).map(
+          (value, index) => (
+            <List.Item key={index}>
+              <List.Content>
+                <List.Header>
+                  Ingredient:{" "}
+                  <Spaned color="#fbbd08">{_upperFirst(value)}</Spaned>
+                </List.Header>
+              </List.Content>
+            </List.Item>
+          )
+        )}
       </List>
       <List>
         <Header as="h4" style={{ marginBottom: "5px" }}>

@@ -27,14 +27,18 @@ class FormIngredients extends React.Component {
       this.setState({
         msgAlert: ""
       });
+      const allergens = alergie;
+      const cuisines = cuisine;
       agent
         .post(
-          "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes"
+          "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes?userId=temp101"
         )
-        .send(`allergens=${alergie}`)
-        .send(`cuisines=${cuisine}`)
-        .send(`ingredients=${JSON.stringify(ingredients)}`)
-        .send(`userId=temp101`)
+        .set("accept", "json")
+        .send(
+          JSON.stringify(
+            Object.assign({ allergens }, { cuisines }, { ingredients })
+          )
+        )
         .use(() => this.setState({ loading: true, disabled: true }))
         .end((err, res) => {
           if (!err) {

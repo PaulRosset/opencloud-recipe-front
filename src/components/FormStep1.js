@@ -5,7 +5,7 @@ import { Header, Icon, Form } from "semantic-ui-react";
 import agent from "superagent";
 import { connect } from "react-redux";
 import { STEP1, GETRESULTAC } from "../store/types";
-import { optionsAlergies, optionsCuisines } from "./../options";
+import { GetCuisineAllergen } from "./../options";
 
 const InputContainer = styled.div`
   margin: 20px 0;
@@ -70,13 +70,14 @@ class FormStep1 extends React.Component {
 
   onSubmit(e) {
     const { alergie, cuisine } = this.state;
+    const allergens = alergie;
+    const cuisines = cuisine;
     agent
       .post(
-        "https://ohmyrecipes-1.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients"
+        "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients?userId=temp101"
       )
-      .send(`allergens=${alergie}`)
-      .send(`cuisines=${cuisine}`)
-      .send(`userId=temp101`)
+      .set("accept", "json")
+      .send(JSON.stringify(Object.assign({ allergens }, { cuisines })))
       .use(() => this.setState({ loading: true }))
       .end((err, res) => {
         if (!err) {
@@ -86,25 +87,39 @@ class FormStep1 extends React.Component {
           });
           this.props.dispatch({
             type: GETRESULTAC,
-            payload: res.body.ingredients
+            payload: res.body.items
           });
         }
         window.scrollTo(0, 550);
       });
   }
 
+  async componentDidMount() {
+    this.optionsCuisines = await GetCuisineAllergen(
+      "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getCuisines",
+      () => this.setState({ loadingForm: true })
+    );
+    this.optionsAlergies = await GetCuisineAllergen(
+      "https://projectcloud-186319.appspot.com/_ah/api/ohmyrecipesAPI/v1/getAllergens",
+      () => this.setState({ loadingForm: true })
+    );
+    this.setState({
+      loadingForm: false
+    });
+  }
+
   render() {
     return (
       <div>
         <Header textAlign="left">Step 1</Header>
-        <Form onSubmit={e => this.onSubmit(e)}>
+        <Form onSubmit={e => this.onSubmit(e)} loading={this.state.loadingForm}>
           <InputSelect
             multiple={true}
             onChange={(e, { value }) => this.onChangeAlergie(e, { value })}
             id="alergie"
             icon="treatment"
             desc="Allergy"
-            options={optionsAlergies}
+            options={this.optionsAlergies || []}
             title="Tell us about your allergy"
           />
           <InputSelect
@@ -113,7 +128,7 @@ class FormStep1 extends React.Component {
             id="cuisine"
             icon="food"
             desc="Cuisine"
-            options={optionsCuisines}
+            options={this.optionsCuisines || []}
             title="Which kind of cuisine you want"
           />
           <Form.Button

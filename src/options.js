@@ -1,3 +1,6 @@
+import agent from "superagent";
+import _upperFirst from "lodash/upperFirst";
+
 export const optionsCuisines = [
   { key: "af", value: "african", text: "African" },
   { key: "us", value: "american", text: "American" },
@@ -48,4 +51,23 @@ export const optionsIngredientsDevColor = {
   sweet: "#FFF5BB",
   seafood: "#D3605E",
   other: "#987866"
+};
+
+export const GetCuisineAllergen = (url, fn) => {
+  return new Promise((resolve, reject) => {
+    agent
+      .post(url)
+      .send("userId=temp101")
+      .use(fn)
+      .end((err, res) => {
+        const options = JSON.parse(res.text).items.map((value, index) => {
+          return {
+            key: index,
+            value: value.name,
+            text: _upperFirst(value.name)
+          };
+        });
+        resolve(options);
+      });
+  });
 };
