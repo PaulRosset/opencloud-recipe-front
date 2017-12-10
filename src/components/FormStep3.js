@@ -75,7 +75,7 @@ class FormStep3 extends React.Component {
     return (
       <div>
         <Header as="h4" textAlign="left">
-          Finally, choose your recipe!
+          Finally, choose a recipe you want to save!
           {this.props.steppings[2] ? (
             <Fragment>
               <Popup
@@ -109,7 +109,7 @@ class FormStep3 extends React.Component {
           />
           <Form.Button
             loading={this.state.loading}
-            content="Submit"
+            content="Save Recipe"
             size="small"
             disabled={this.state.disabled}
           />
