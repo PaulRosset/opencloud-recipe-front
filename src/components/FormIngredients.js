@@ -34,11 +34,7 @@ class FormIngredients extends React.Component {
           "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getRecipes?userId=temp101"
         )
         .set("accept", "json")
-        .send(
-          JSON.stringify(
-            Object.assign({ allergens }, { cuisines }, { ingredients })
-          )
-        )
+        .send(Object.assign({ allergens }, { cuisines }, { ingredients }))
         .use(() => this.setState({ loading: true, disabled: true }))
         .end((err, res) => {
           if (!err) {
