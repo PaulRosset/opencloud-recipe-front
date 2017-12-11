@@ -43,16 +43,9 @@ class FormStep1 extends React.Component {
   };
 
   onChangeAlergie(e, { value }) {
-    this.setState(
-      {
-        alergie: value
-      },
-      () => {
-        this.state.cuisine && this.state.alergie
-          ? this.setState({ isDisabled: false })
-          : this.setState({ isDisabled: true });
-      }
-    );
+    this.setState({
+      alergie: value
+    });
   }
 
   onChangeCuisine(e, { value }) {
@@ -61,7 +54,7 @@ class FormStep1 extends React.Component {
         cuisine: value
       },
       () => {
-        this.state.cuisine && this.state.alergie
+        this.state.cuisine
           ? this.setState({ isDisabled: false })
           : this.setState({ isDisabled: true });
       }
@@ -77,7 +70,7 @@ class FormStep1 extends React.Component {
         "https://ohmyrecipes.appspot.com/_ah/api/ohmyrecipesAPI/v1/getIngredients?userId=temp101"
       )
       .set("accept", "json")
-      .send(JSON.stringify(Object.assign({ allergens }, { cuisines })))
+      .send(Object.assign({ allergens }, { cuisines }))
       .use(() => this.setState({ loading: true }))
       .end((err, res) => {
         if (!err) {
